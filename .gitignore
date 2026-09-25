@@ -1,0 +1,12 @@
+# Dataset (download from Kaggle, see README)
+dataset/
+train/
+val/
+test/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.claude/
