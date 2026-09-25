@@ -1,7 +1,8 @@
 import os
 import streamlit as st
-import tensorflow as tf
-from tensorflow.keras.applications.mobilenet_v3 import preprocess_input
+# The model was saved with Keras 2, so load it with tf_keras (Keras 2 for TF >= 2.16)
+import tf_keras as keras
+from tf_keras.applications.mobilenet_v3 import preprocess_input
 import numpy as np
 from PIL import Image
 from recommendation import cnv,dme,drusen,normal
@@ -19,14 +20,14 @@ SAMPLES_DIR = "samples"
 
 @st.cache_resource()
 def load_model():
-    model = tf.keras.models.load_model("Trained_eye_disease_model.h5")
+    model = keras.models.load_model("Trained_eye_disease_model.h5")
     return model
 
 #Model Prediction - returns the probability for each class
 def model_prediction(image):
     model = load_model()
     img = image.convert("RGB").resize((224,224))
-    x = tf.keras.utils.img_to_array(img)
+    x = keras.utils.img_to_array(img)
     x = np.expand_dims(x,axis=0)
     x = preprocess_input(x)
     return model.predict(x, verbose=0)[0]
