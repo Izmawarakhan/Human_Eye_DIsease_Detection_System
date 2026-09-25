@@ -16,7 +16,8 @@ The model is a MobileNetV3-based CNN trained on the Kaggle dataset [Labeled Opti
 ```
 app.py                          Streamlit web app (UI)
 recommendation.py               Recommendations shown for each predicted disease
-Trained_eye_disease_model.h5    Trained model used by the app
+eye_disease_model.onnx          Trained model in ONNX format (used by the app)
+Trained_eye_disease_model.h5    Trained Keras model
 trained_eye_disease_model.keras Same model in .keras format
 Traning_Model.ipynb             Training notebook
 Model_Prediction.ipynb          Prediction notebook
@@ -26,7 +27,7 @@ samples/                        A few OCT images per class to try the app
 
 ## Run the app
 
-Requires Python 3.9 to 3.11.
+The app runs the model with ONNX Runtime, so TensorFlow is not needed to run it (any recent Python works).
 
 ```bash
 git lfs install

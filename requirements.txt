@@ -1,4 +1,4 @@
-tensorflow==2.20.0
-tf-keras==2.20.1
+onnxruntime
+numpy
 streamlit>=1.50
 pillow

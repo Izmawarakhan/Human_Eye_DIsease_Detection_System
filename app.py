@@ -1,8 +1,9 @@
 import os
 import streamlit as st
-# The model was saved with Keras 2, so load it with tf_keras (Keras 2 for TF >= 2.16)
-import tf_keras as keras
-from tf_keras.applications.mobilenet_v3 import preprocess_input
+# The Keras model (Trained_eye_disease_model.h5) is converted to ONNX so the app
+# runs with the lightweight onnxruntime instead of TensorFlow.
+# MobileNetV3 has its preprocessing built into the model, so raw 0-255 pixels go in.
+import onnxruntime as ort
 import numpy as np
 from PIL import Image
 from recommendation import cnv,dme,drusen,normal
@@ -20,17 +21,15 @@ SAMPLES_DIR = "samples"
 
 @st.cache_resource()
 def load_model():
-    model = keras.models.load_model("Trained_eye_disease_model.h5")
-    return model
+    return ort.InferenceSession("eye_disease_model.onnx")
 
 #Model Prediction - returns the probability for each class
 def model_prediction(image):
     model = load_model()
     img = image.convert("RGB").resize((224,224))
-    x = keras.utils.img_to_array(img)
+    x = np.asarray(img, dtype=np.float32)
     x = np.expand_dims(x,axis=0)
-    x = preprocess_input(x)
-    return model.predict(x, verbose=0)[0]
+    return model.run(None, {model.get_inputs()[0].name: x})[0][0]
 
 def list_samples():
     samples = {}
